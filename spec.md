@@ -38,13 +38,14 @@ The following operators are required in a valid base implementation of QuickScri
   * The `(` and `)` operators
   * The `[` and `]` operators
   * The `{` and `}` operators
+
 Note that the data within the two latter operator pairs is not parsed in the same manner as with most values (see the `[`/`]` spec and the `{`/`}` spec).
 
 ##### Prefix Operators
-There are only three prefix operators in QuickScript. The first one is the `!` operator. The `!` operator negates a value (i.e., it determines whether a value is truthy and returns the boolean inverse of that truth value). The `@` operator, on the other hand, performs various operations. **Note that no operator can begin with `@` other than `@` itself, as `@` is the operator operator (i.e., it operates on the operator after it). See the `@` spec.** The final prefix operator is the `-` operator, which negates a number.
+There are only three prefix operators in QuickScript. The first one is the `!` operator. The `!` operator negates a value (i.e., it determines whether a value is truthy and returns the boolean inverse of that truth value). The `@` operator, on the other hand, performs various operations. **Note that no operator can begin with `@` other than `@` itself, as `@` is the operator operator (i.e., it operates on any infix operators after it). See the `@` spec.** The final prefix operator is the `-` operator, which negates a number.
 Therefore, only the following are required in a valid base implementation of QuickScript:
   * The `!` operator
-  * The `@` operator (which is special, as it can perform operations on operators)
+  * The `@` operator (which is special, as it can perform operations on infix operators)
   * The `-` operator
 
 ##### Infix Operators
@@ -60,7 +61,8 @@ The following operators are required in a valid base implementation of QuickScri
   * 90: The `|` and `&` operators
   * 100: The `=` operator (special left-side parsing; see its spec)
   * 100: The `+=`, `-=`, `*=`, `/=`, `%=`, `->=`, `^=`, `|=`, and `&=` (see above)
- Note that operators with lower precedence numbers are parsed first. Also, infix operators are parsed after prefix operators, which in turn are parsed after outfix operators.
+
+Note that operators with lower precedence numbers are parsed first. Also, infix operators are parsed after prefix operators, which in turn are parsed after outfix operators.
 
 #### Parsing Rules
 When parsing QuickScript, the first thing that should be done is the removal of comments from the code. Note that comments are ignored if in string literals, so make sure to account for this.
