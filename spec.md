@@ -35,13 +35,22 @@ The following operators are required in a valid base implementation of QuickScri
 Note that the data within the two latter operator pairs is not parsed in the same manner as with most values (see the `[`/`]` spec and the `{`/`}` spec).
 
 ##### Prefix Operators
-There are only two prefix operators in QuickScript. The first one is the `!` operator. The `!` operator negates a value (i.e., it determines whether a value is truthy and returns the boolean inverse of that truth value). The `@` operator, on the other hand, performs various operations. **Note that no operator can begin with `@` other than `@` itself, as `@` is the operator operator (i.e., it operates on the operator after it). See the `@` spec.**
+There are only three prefix operators in QuickScript. The first one is the `!` operator. The `!` operator negates a value (i.e., it determines whether a value is truthy and returns the boolean inverse of that truth value). The `@` operator, on the other hand, performs various operations. **Note that no operator can begin with `@` other than `@` itself, as `@` is the operator operator (i.e., it operates on the operator after it). See the `@` spec.** The final prefix operator is the `-` operator, which negates a number.
 Therefore, only the following are required in a valid base implementation of QuickScript:
   * The `!` operator
   * The `@` operator (which is special, as it can perform operations on operators)
+  * The `-` operator
 
 ##### Infix Operators
 Infix operators are the most commonly used and the most abundant operators in QuickScript. Infix operators can be added in the code during runtime. Note that certain infix operators are treated differently (i.e., the values they modify are not parsed normally).
-The following operators are required in a valid base implementation of QuickScript:
-  * The `=` operator (special left-side parsing; see its spec)
-  * The `+=`, `-=`, `*=`, `/=`, `%=`, `->=`, `^=`, `|=`, and `&=`
+The following operators are required in a valid base implementation of QuickScript (in order or highest precedence first):
+  * 10: The `.` operator (special parsing for numbers; see its spec)
+  * 20: The `^` and `->` operators
+  * 30: The `*`, `/`, and `%` operators
+  * 40: The `+` and `-` operators
+  * 60: The default operator precedence
+  * 80: The `==`, `!=`, `===`, `!==`, `>`, `<`, `>=`, and `<=` operators
+  * 90: The `|` and `&` operators
+  * 100: The `=` operator (special left-side parsing; see its spec)
+  * 100: The `+=`, `-=`, `*=`, `/=`, `%=`, `->=`, `^=`, `|=`, and `&=` (see above)
+ Note that operators with lower precedence numbers are parsed first. Also, infix operators are parsed after prefix operators, which in turn are parsed after outfix operators.
