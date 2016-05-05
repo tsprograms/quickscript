@@ -60,7 +60,7 @@ The following operators are required in a valid base implementation of QuickScri
   * 80: The `==`, `!=`, `===`, `!==`, `>`, `<`, `>=`, and `<=` operators
   * 90: The `|` and `&` operators
   * 100: The `=` operator (special left-side parsing; see its spec)
-  * 100: The `+=`, `-=`, `*=`, `/=`, `%=`, `->=`, `^=`, `|=`, and `&=` (see above)
+  * 100: The `+=`, `-=`, `*=`, `/=`, `%=`, `->=`, `^=`, `|=`, and `&=` operators (see above)
 
 Note that operators with lower precedence numbers are parsed first. Also, infix operators are parsed after prefix operators, which in turn are parsed after outfix operators.
 
