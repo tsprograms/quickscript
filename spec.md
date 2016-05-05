@@ -3,8 +3,7 @@
 # The QuickScript Spec
 QuickScript is a specific language. Any valid implementation of QuickScript should behave in *the exact same way* as any other implementation, excluding platform-specific data.
 
-#### Literals
-<!-- TODO -->
+### Parsing QuickScript (Making a Tree)
 
 #### Comments
 In QuickScript syntax, comments are blocks of code used to explain or comment on functional code. Comments don't actually *do* anything; they just make your code more readable and better. Comments should be ignored entirely in parsing.
@@ -20,6 +19,13 @@ For example, this ### will be ignored, and so will
 this ## ## # ###.
 But this ends the comment. --> ####
 ```
+
+Comments are ignored if in string literals (see below).
+
+#### Literals
+Literals in QuickScript are simply ways of literally describing various simple types. There are only two literals in QuickScript: string literals and number literals.
+String literals are surrounded with either `"`s or `'`s (double quotes or single quotes). Double quotes or single quotes preceded by a `\` (backslash) should not be treated as the end of the string literal.
+Numeric literals are formed with tokens that are just numbers, possibly with a dot in the middle as a decimal point.
 
 #### Operators
 In QuickScript syntax, an operator is one or more consecutive non-alphanumeric characters. Operators, as the name suggests, perform various operations or functions. One example of an operator would be the `+` operator, which adds values together. Operators work by modifiying a value or multiple values. They take the input provided by the values they modify, and produce an output based on what they are designed to do.
@@ -49,8 +55,18 @@ The following operators are required in a valid base implementation of QuickScri
   * 30: The `*`, `/`, and `%` operators
   * 40: The `+` and `-` operators
   * 60: The default operator precedence
+  * 70: The function call precedence (includes `,` operator) - function calls are formed with any two non-whitespace tokens separated by only whitespace. More function arguments can be passed by separating them with `,`s (commas). See the function call spec.
   * 80: The `==`, `!=`, `===`, `!==`, `>`, `<`, `>=`, and `<=` operators
   * 90: The `|` and `&` operators
   * 100: The `=` operator (special left-side parsing; see its spec)
   * 100: The `+=`, `-=`, `*=`, `/=`, `%=`, `->=`, `^=`, `|=`, and `&=` (see above)
  Note that operators with lower precedence numbers are parsed first. Also, infix operators are parsed after prefix operators, which in turn are parsed after outfix operators.
+
+#### Parsing Rules
+When parsing QuickScript, the first thing that should be done is the removal of comments from the code. Note that comments are ignored if in string literals, so make sure to account for this.
+
+The next step is to parse all literals.
+
+The third step is to parse all operators. Outfix, then prefix, and finally infix operators should be parsed (infix in order of lowest to highest precedence number; see above).
+
+Once these three steps are complete, a tree of code should be formed. Note that any tokens that are not comments, literals, or operators are identifiers - they refer to a stored value.
