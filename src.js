@@ -5,8 +5,8 @@ Copyright © 2016 TSPrograms.
 
 // Everything is in an anonymous function to prevent global scope corruption
 (function() {
-  var OUTFIX_OPERATORS = '()[]{}';
-  var PREFIX_OPERATORS = '-!@';
+  var OUTFIX_OPERATORS = '()[]{}'.split('');
+  var PREFIX_OPERATORS = '-!@'.split('');
   
   // canBeOperator returns whether a string is a valid operator name
   var canBeOperator = function(str) {
@@ -55,7 +55,23 @@ Copyright © 2016 TSPrograms.
           break;
         case 'operator':
           if (canBeOperator(char)) {
-            tokenized[index] += char;
+            if (tokenized[index] === '') { // If no current operator, just add on
+              tokenized[index] += char;
+            }
+            else if (OUTFIX_OPERATORS.indexOf(char) !== -1 || OUTFIX_OPERATORS.indexOf(tokenized[index]) !== -1) {
+              // If operator is outfix, it can't be part of another operator
+              ++index;
+              tokenized[index] = char;
+            }
+            else if (PREFIX_OPERATORS.indexOf(char) !== -1 && PREFIX_OPERATORS.indexOf(tokenized[index]) !== -1) {
+              // If there are two consecutive prefix operators, they do not form one operator
+              ++index;
+              tokenized[index] = char;
+            }
+            else {
+              // Must be an infix operator
+              tokenized[index] += char;
+            }
           }
           else {
             // Switch type if character cannot be operator
@@ -107,12 +123,6 @@ Copyright © 2016 TSPrograms.
         default:
           // This should never occur
           throw 'QuickScript: ParseError: Unknown token type "' + type + '"';
-      }
-    }
-    for (var i = 0; i < tokenized.length; ++i) {
-      // TODO: Handle prefix + grouping
-      if (!tokenized[i].match(/[^-@!]/)) {
-        // TODO: Split this token into separate prefix operators
       }
     }
     return tokenized;
