@@ -5,6 +5,9 @@ Copyright © 2016 TSPrograms.
 
 // Everything is in an anonymous function to prevent global scope corruption
 (function() {
+  var OUTFIX_OPERATORS = '()[]{}';
+  var PREFIX_OPERATORS = '-!@';
+  
   // canBeOperator returns whether a string is a valid operator name
   var canBeOperator = function(str) {
     // A string can be an operator if it does not contain alphanumeric characters or whitespace
@@ -106,12 +109,24 @@ Copyright © 2016 TSPrograms.
           throw 'QuickScript: ParseError: Unknown token type "' + type + '"';
       }
     }
+    for (var i = 0; i < tokenized.length; ++i) {
+      // TODO: Handle prefix + grouping
+      if (!tokenized[i].match(/[^-@!]/)) {
+        // TODO: Split this token into separate prefix operators
+      }
+    }
     return tokenized;
+  };
+  
+  var makeTree = function(code) {
+    code = tokenize(code);
+    // TODO
+    return code;
   };
   
   // run takes a code string and (TODO) returns the result of executing it
   var run = function(code) {
-    return tokenize(code);
+    return makeTree(code);
   };
   
   // Export the run function as window.QuickScript.runCode
