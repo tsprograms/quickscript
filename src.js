@@ -7,6 +7,7 @@ Copyright © 2016 TSPrograms.
 (function() {
   var OUTFIX_OPERATORS = '()[]{}'.split('');
   var PREFIX_OPERATORS = '-!@'.split('');
+  var QS_TOKEN = Math.random().toString(36); // This token is used for validating any JS objects as "QuickScript values"
   
   // canBeOperator returns whether a string is a valid operator name
   var canBeOperator = function(str) {
@@ -130,7 +131,37 @@ Copyright © 2016 TSPrograms.
   
   var makeTree = function(code) {
     code = tokenize(code);
-    // TODO
+    var index, layers, finalIndex;
+    while((index = code.indexOf('(')) !== -1) {
+      finalIndex = -1;
+      layers = 0;
+      for (var i = index + 1; i < code.length; ++i) {
+        switch (code[i]) {
+          case '(':
+            ++layers;
+            break;
+          case ')':
+            --layers;
+            break;
+        }
+        if (layers === -1) {
+          finalIndex = i;
+          break;
+        }
+      }
+      if (finalIndex === -1) {
+        // If no matching parenthesis, throw ParseError
+        throw {
+          type:  'ParseError',
+          token: index,
+          text:  'Unmatched parenthesis'
+        };
+      }
+      code[index] = makeTree(
+        code.splice(index, finalIndex - index + 1, '').slice(1, -1)
+      ); // Replace the elements in parentheses
+    }
+    
     return code;
   };
   
