@@ -146,7 +146,14 @@ Copyright © 2016 TSPrograms.
         }
         if (layers === -1) {
           finalIndex = i;
-          break;
+        }
+        else if (layers < -1) {
+          // If too many closing parentheses, throw ParseError
+          throw {
+            type:  'ParseError',
+            token: index,
+            text:  'Umatched parenthesis'
+          };
         }
       }
       if (finalIndex === -1) {
